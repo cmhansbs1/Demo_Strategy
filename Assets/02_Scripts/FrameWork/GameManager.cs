@@ -2,6 +2,7 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System;
 using System.Linq;
+using System.Resources;
 
 /// <summary>
 /// 초기화 결과
@@ -39,9 +40,11 @@ public class GameManager : MonoBehaviour
     private bool Initialized { get; set; } = false;
 
     //TODO: 매니저 레퍼런스 추가
-    private LogManager LogManager { get; set; }
+    private LogManager logManager { get; set; }
+    private ResourceManager resourceManager { get; set; }
 
-    public LogManager GetLogManager => LogManager;
+    public LogManager GetLogManager => logManager;
+    public ResourceManager GetRM => resourceManager;
 
     /// <summary>
     /// RunAsync() - 외부에서 호출용
@@ -50,6 +53,23 @@ public class GameManager : MonoBehaviour
     public async UniTaskVoid RunAsync(Action<InitResult[]> onComplete = null)
     {
         var results = await InitializeAllAsync();
+
+        bool hasFailed = false;
+        for(int i = 0; i < results.Length; i++)
+        {
+            if(!results[i].Success)
+            {
+                Debug.LogError($"초기화 실패: {results[i].Name}");
+                hasFailed = true;
+                break;
+            }
+        }
+
+        if(hasFailed == true)
+        {
+            Debug.LogError($"매니저 초기화 중 오류 발생 > onComplete 실행 불가!!");
+            return;
+        }
 
         onComplete?.Invoke(results);
     }
@@ -65,17 +85,20 @@ public class GameManager : MonoBehaviour
 
             return new InitResult[]
             {
-                 new InitResult { Name = LogManager.Name, Success = true }
+                 new InitResult { Name = logManager.Name, Success = true },
+                 new InitResult { Name = resourceManager.Name, Success = true }
             };
         }
 
         Debug.Log("모든 매니저 생성 및 초기화 시작...");
 
         //TODO: 매니저 생성
-        LogManager = AddManager<LogManager>();
+        logManager = AddManager<LogManager>();
+        resourceManager = AddManager<ResourceManager>();
 
         var managers = new IManager [] {
-            LogManager 
+            logManager,
+            resourceManager,
         };
 
         // 비동기 초기화 + 결과 수집

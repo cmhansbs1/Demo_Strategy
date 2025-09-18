@@ -45,7 +45,7 @@ public class LogManager : MonoBehaviour, IManager
                 // 실제 파일 생성/접근 테스트
                 try
                 {
-                    await UniTask.Run(() => File.WriteAllText(_logFilePath, ""));
+                    await UniTask.Run(() => File.WriteAllText(_logFilePath, "")); 
                     await UniTask.Run(() => File.ReadAllText(_logFilePath));
                 }
                 catch(Exception ex)
