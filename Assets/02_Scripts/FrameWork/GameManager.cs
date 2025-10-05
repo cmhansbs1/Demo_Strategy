@@ -42,9 +42,11 @@ public class GameManager : MonoBehaviour
     //TODO: 매니저 레퍼런스 추가
     private LogManager logManager { get; set; }
     private ResourceManager resourceManager { get; set; }
+    private AssetManager assetManager { get; set; }
 
-    public LogManager GetLogManager => logManager;
-    public ResourceManager GetRM => resourceManager;
+    public static LogManager GetLogManager => Instance.logManager;
+    public static ResourceManager GetRM => Instance.resourceManager;
+    public static AssetManager GetAM => Instance.assetManager;
 
     /// <summary>
     /// RunAsync() - 외부에서 호출용
@@ -95,10 +97,13 @@ public class GameManager : MonoBehaviour
         //TODO: 매니저 생성
         logManager = AddManager<LogManager>();
         resourceManager = AddManager<ResourceManager>();
+        assetManager = AddManager<AssetManager>();
 
+        //생성되는 순서에 주의!!
         var managers = new IManager [] {
             logManager,
             resourceManager,
+            assetManager,
         };
 
         // 비동기 초기화 + 결과 수집
@@ -106,7 +111,9 @@ public class GameManager : MonoBehaviour
 
         // Init() 실행
         foreach(var m in managers)
+        {
             m.Init();
+        }
 
         Initialized = true;
 
