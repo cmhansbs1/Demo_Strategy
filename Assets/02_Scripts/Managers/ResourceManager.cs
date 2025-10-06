@@ -112,6 +112,6 @@ public class ResourceManager : MonoBehaviour, IManager
         }
         _handles.Clear();
 
-        Debug.Log("[ResourceManager] Released all cached resources");
+        Debug.Log("[ResourceManager] 모든 리소스 캐싱 Clear 완료");
     }
 }

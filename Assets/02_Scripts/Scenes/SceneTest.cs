@@ -2,7 +2,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-public class Scene_Boot : MonoBehaviour
+public class SceneTest : MonoBehaviour
 {
     public async void Start()
     {
@@ -18,15 +18,18 @@ public class Scene_Boot : MonoBehaviour
         await GameManager.GetAM.PreloadAsync(AssetType.Character, "Cube", 5);
         await GameManager.GetAM.PreloadAsync(AssetType.Character, "Cylinder", 5);
 
-        GameManager.GetAM.CreateAsync(AssetType.Character, "Cube", (go) =>
+        for(int i = 0; i < 7; i++)
         {
-            go.transform.position = Vector3.zero;
-            Debug.Log("Cube 생성 완료");
-        });
+            GameManager.GetAM.CreateAsync(AssetType.Character, "Cube", (go) =>
+            {
+                go.transform.position = new Vector3(0, i * 2 - 6, 0);
+                Debug.Log("Cube 생성 완료");
+            });
+        }
 
         GameManager.GetAM.CreateAsync(AssetType.Character, "Cylinder", (go) =>
         {
-            go.transform.position = new Vector3(30, 0, 0);
+            go.transform.position = new Vector3(8, 0, 0);
             Debug.Log("Cylinder 생성 완료");
         });
 
@@ -45,5 +48,9 @@ public class Scene_Boot : MonoBehaviour
                     });
 
                 }).Forget();*/
+
+        await UniTask.Delay(2000);
+
+        GameManager.GetSM.ChangeSceneAsync("SceneTest1").Forget();
     }
 }

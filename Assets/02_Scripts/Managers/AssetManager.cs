@@ -47,6 +47,11 @@ public class AssetManager : MonoBehaviour, IManager
             return;
         }
 
+        ReInit();
+    }
+
+    public void ReInit()
+    { //씬 이동하며 모두 Clear하므로 다시 생성..
         // Pool 폴더 자동 생성
         var poolObj = GameObject.Find("Pool");
         if(poolObj == null)
@@ -55,16 +60,18 @@ public class AssetManager : MonoBehaviour, IManager
             poolObj.transform.position = Vector3.one * 999999.0f;
         }
         _poolRoot = poolObj.transform;
-    }
 
-    public async UniTask<bool> InitializeAsync()
-    {
-        // 별도 초기화할 Addressable 그룹이 있다면 여기에 추가
         foreach(AssetType type in System.Enum.GetValues(typeof(AssetType)))
         {
             if(type == AssetType.None) continue;
             pool[type] = new Dictionary<string, Queue<GameObject>>();
         }
+    }
+
+    public async UniTask<bool> InitializeAsync()
+    {
+        // 별도 초기화할 Addressable 그룹이 있다면 여기에 추가
+   
 
         await UniTask.CompletedTask;
         Debug.Log("[AssetManager] InitializeAsync 완료");
@@ -135,7 +142,7 @@ public class AssetManager : MonoBehaviour, IManager
     /// <summary>
     /// 풀링된 모든 오브젝트 제거 (메모리 해제)
     /// </summary>
-    public void ClearPool()
+    public void ClearPoolAll()
     {
         foreach(var typeDict in pool.Values)
         {
@@ -159,7 +166,7 @@ public class AssetManager : MonoBehaviour, IManager
             }
         }
 
-        Debug.Log("[AssetManager] 풀 초기화 완료");
+        Debug.Log("[AssetManager] 모든 Pooling Clear 완료");
     }
     #endregion
 
@@ -200,7 +207,6 @@ public class AssetManager : MonoBehaviour, IManager
     }
 
     #endregion
-
 
     #region Private
 

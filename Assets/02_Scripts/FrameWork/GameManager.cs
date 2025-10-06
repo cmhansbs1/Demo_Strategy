@@ -43,10 +43,12 @@ public class GameManager : MonoBehaviour
     private LogManager logManager { get; set; }
     private ResourceManager resourceManager { get; set; }
     private AssetManager assetManager { get; set; }
+    private SceneManager sceneManager { get; set; }
 
     public static LogManager GetLogManager => Instance.logManager;
     public static ResourceManager GetRM => Instance.resourceManager;
     public static AssetManager GetAM => Instance.assetManager;
+    public static SceneManager GetSM => Instance.sceneManager;
 
     /// <summary>
     /// RunAsync() - 외부에서 호출용
@@ -85,11 +87,14 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log(" == 이미 초기화됨 == ");
 
+            assetManager.ReInit();
+
             return new InitResult[]
             {
                  new InitResult { Name = logManager.Name, Success = true },
                  new InitResult { Name = resourceManager.Name, Success = true },
-                 new InitResult { Name = assetManager.Name, Success = true }
+                 new InitResult { Name = assetManager.Name, Success = true },
+                 new InitResult { Name = sceneManager.Name, Success = true }
             };
         }
 
@@ -99,12 +104,14 @@ public class GameManager : MonoBehaviour
         logManager = AddManager<LogManager>();
         resourceManager = AddManager<ResourceManager>();
         assetManager = AddManager<AssetManager>();
+        sceneManager = AddManager<SceneManager>();
 
         //생성되는 순서에 주의!!
         var managers = new IManager [] {
             logManager,
             resourceManager,
             assetManager,
+            sceneManager,
         };
 
         // 비동기 초기화 + 결과 수집
