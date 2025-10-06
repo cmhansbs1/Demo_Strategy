@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
     /// RunAsync() - 외부에서 호출용
     /// Instance 접근 + 초기화 + Init 처리
     /// </summary>
-    public async UniTaskVoid RunAsync(Action<InitResult[]> onComplete = null)
+    public async UniTask RunAsync(Action<InitResult[]> onComplete = null)
     {
         var results = await InitializeAllAsync();
 
@@ -88,7 +88,8 @@ public class GameManager : MonoBehaviour
             return new InitResult[]
             {
                  new InitResult { Name = logManager.Name, Success = true },
-                 new InitResult { Name = resourceManager.Name, Success = true }
+                 new InitResult { Name = resourceManager.Name, Success = true },
+                 new InitResult { Name = assetManager.Name, Success = true }
             };
         }
 

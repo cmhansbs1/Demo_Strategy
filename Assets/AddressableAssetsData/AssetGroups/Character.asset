@@ -15,8 +15,13 @@ MonoBehaviour:
   m_GroupName: Character
   m_GUID: 93749ae54c0349b45a947e874bc534fe
   m_SerializeEntries:
+  - m_GUID: 37c9fffe3f59b054a9aeced590c46bd0
+    m_Address: Character_Cylinder.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e9a1cc8bc42eb064b8fc16aa060ccfb2
-    m_Address: Character_Cube
+    m_Address: Character_Cube.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
